@@ -21,14 +21,27 @@ const app = express()
 app.use(express.json())
 
 // PostgreSQL connection pool
-const pool = new pg.Pool({
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'plmokn',
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'studentdb',
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
-})
+let poolConfig;
+
+if (process.env.DATABASE_URL) {
+  // Use DATABASE_URL if available (Railway auto-provides this)
+  poolConfig = {
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  };
+} else {
+  // Fall back to individual environment variables
+  poolConfig = {
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'plmokn',
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    database: process.env.DB_NAME || 'studentdb',
+    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+  };
+}
+
+const pool = new pg.Pool(poolConfig)
 
 pool.on('error', (err) => {
   console.error('Unexpected error on idle client', err)
