@@ -8,10 +8,15 @@ export default function Result(){
   async function show(){
     setError("");
     setStudent(null);
-    const x = await fetch(`/marks/${roll}`);
-    const s = await x.json();
-    if(s.error){ setError("Not Found"); return; }
-    setStudent(s);
+    try {
+      const x = await fetch(`/marks/${roll}`);
+      const s = await x.json();
+      if(s.error){ setError(s.error); return; }
+      setStudent(s);
+    } catch(e) {
+      setError("Network Error");
+      console.error(e);
+    }
   }
 
   return(

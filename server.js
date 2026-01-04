@@ -22,11 +22,12 @@ app.use(express.json())
 
 // PostgreSQL connection pool
 const pool = new pg.Pool({
-  user: 'postgres',
-  password: 'plmokn',
-  host: 'localhost',
-  port: 5432,
-  database: 'studentdb'
+  user: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD || 'plmokn',
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || 'studentdb',
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
 })
 
 pool.on('error', (err) => {
