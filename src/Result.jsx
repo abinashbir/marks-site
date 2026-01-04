@@ -8,7 +8,7 @@ export default function Result(){
   async function show(){
     setError("");
     setStudent(null);
-    const x = await fetch(`/marks/${roll}`);
+    const x = await fetch(`/api/marks/${roll}`);
     const s = await x.json();
     if(s.error){ setError("Not Found"); return; }
     setStudent(s);
