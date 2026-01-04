@@ -5,7 +5,7 @@ export default function Admin(){
   const [msg, setMsg] = useState("");
 
   async function save(){
-    const x = await fetch("/api/marks",{
+    const x = await fetch("/marks",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(f)
